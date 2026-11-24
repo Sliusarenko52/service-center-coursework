@@ -1,0 +1,113 @@
+{
+  "files_count": 15,
+  "total_lines": 3397,
+  "non_empty_lines": 3033,
+  "comment_lines": 83,
+  "by_file": [
+    {
+      "file": "Program.cs",
+      "ext": ".cs",
+      "total_lines": 113,
+      "non_empty_lines": 96,
+      "comment_lines": 0
+    },
+    {
+      "file": "Controllers/AuthController.cs",
+      "ext": ".cs",
+      "total_lines": 90,
+      "non_empty_lines": 79,
+      "comment_lines": 0
+    },
+    {
+      "file": "Controllers/RequestsController.cs",
+      "ext": ".cs",
+      "total_lines": 109,
+      "non_empty_lines": 94,
+      "comment_lines": 0
+    },
+    {
+      "file": "Data/DatabaseInitializer.cs",
+      "ext": ".cs",
+      "total_lines": 401,
+      "non_empty_lines": 364,
+      "comment_lines": 13
+    },
+    {
+      "file": "Models/DomainModels.cs",
+      "ext": ".cs",
+      "total_lines": 140,
+      "non_empty_lines": 129,
+      "comment_lines": 27
+    },
+    {
+      "file": "Models/Dtos.cs",
+      "ext": ".cs",
+      "total_lines": 98,
+      "non_empty_lines": 83,
+      "comment_lines": 0
+    },
+    {
+      "file": "Services/AuthService.cs",
+      "ext": ".cs",
+      "total_lines": 144,
+      "non_empty_lines": 126,
+      "comment_lines": 3
+    },
+    {
+      "file": "Services/RequestService.cs",
+      "ext": ".cs",
+      "total_lines": 769,
+      "non_empty_lines": 665,
+      "comment_lines": 3
+    },
+    {
+      "file": "Services/ServiceException.cs",
+      "ext": ".cs",
+      "total_lines": 51,
+      "non_empty_lines": 44,
+      "comment_lines": 3
+    },
+    {
+      "file": "Services/WorkflowRules.cs",
+      "ext": ".cs",
+      "total_lines": 159,
+      "non_empty_lines": 144,
+      "comment_lines": 10
+    },
+    {
+      "file": "wwwroot/index.html",
+      "ext": ".html",
+      "total_lines": 447,
+      "non_empty_lines": 423,
+      "comment_lines": 12
+    },
+    {
+      "file": "wwwroot/css/styles.css",
+      "ext": ".css",
+      "total_lines": 92,
+      "non_empty_lines": 80,
+      "comment_lines": 1
+    },
+    {
+      "file": "wwwroot/js/api.js",
+      "ext": ".js",
+      "total_lines": 89,
+      "non_empty_lines": 80,
+      "comment_lines": 3
+    },
+    {
+      "file": "wwwroot/js/app.js",
+      "ext": ".js",
+      "total_lines": 636,
+      "non_empty_lines": 573,
+      "comment_lines": 8
+    },
+    {
+      "file": "wwwroot/js/ui.js",
+      "ext": ".js",
+      "total_lines": 59,
+      "non_empty_lines": 53,
+      "comment_lines": 0
+    }
+  ]
+}

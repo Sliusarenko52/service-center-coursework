@@ -1,0 +1,121 @@
+openapi: 3.1.0
+info:
+  title: Service Center Requests API
+  version: 1.0.0
+  description: REST API вебсистеми обліку заявок сервісного центру (Варіант 7).
+servers:
+  - url: http://localhost:5080
+paths:
+  /health:
+    get:
+      summary: Перевірка стану застосунку та підключення до SQLite
+      responses:
+        "200":
+          description: Сервіс і БД доступні
+        "503":
+          description: БД недоступна
+  /api/auth/login:
+    post:
+      summary: Вхід користувача (видача HttpOnly cookie-сесії)
+      responses:
+        "200":
+          description: Успішна автентифікація
+        "400":
+          description: Некоректні облікові дані
+  /api/auth/register:
+    post:
+      summary: Реєстрація нового клієнта
+      responses:
+        "201":
+          description: Клієнта зареєстровано
+        "400":
+          description: Помилка валідації (зокрема пароль < 15 символів)
+        "409":
+          description: Email вже існує
+  /api/requests:
+    get:
+      summary: Отримання списку заявок згідно з роллю користувача
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: sortBy
+          in: query
+          schema: { type: string, enum: [updated_at, created_at, total_cost, status] }
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: pageSize
+          in: query
+          schema: { type: integer, default: 10, maximum: 100 }
+      responses:
+        "200":
+          description: Пагінований список заявок
+    post:
+      summary: Реєстрація нової заявки (Клієнт або Приймальник)
+      responses:
+        "201":
+          description: Заявку створено
+        "400":
+          description: Помилка валідації полів
+        "403":
+          description: Заборонено для ролі Виконавця
+  /api/requests/{id}:
+    get:
+      summary: Детальна інформація по заявці, роботах, деталях та історії станів
+      responses:
+        "200":
+          description: Деталі заявки
+        "403":
+          description: Спроба доступу до чужої заявки
+        "404":
+          description: Заявку не знайдено
+  /api/requests/{id}/assign:
+    post:
+      summary: Призначення виконавця (тільки Приймальник)
+      responses:
+        "200":
+          description: Виконавця призначено, версію збільшено
+        "409":
+          description: Конфлікт версій або недопустимий стан
+  /api/requests/{id}/diagnostics:
+    put:
+      summary: Фіксація або оновлення результатів діагностики
+      responses:
+        "200":
+          description: Діагностику збережено
+        "409":
+          description: Конфлікт одночасного редагування (VERSION_CONFLICT)
+  /api/requests/{id}/works:
+    post:
+      summary: Додавання виду роботи з перерахунком вартості
+      responses:
+        "200":
+          description: Роботу додано
+        "400":
+          description: Некоректна вартість (<= 0)
+        "409":
+          description: Конфлікт версій
+  /api/requests/{id}/parts:
+    post:
+      summary: Списання деталі зі складу до заявки
+      responses:
+        "200":
+          description: Деталь додано та списано зі складу
+        "409":
+          description: Недостатньо на складі або конфлікт версій
+  /api/requests/{id}/status:
+    post:
+      summary: Перехід стану заявки за життєвим циклом
+      responses:
+        "200":
+          description: Статус змінено, запис додано в історію
+        "400":
+          description: Відсутній результат виконання або причина відхилення
+        "403":
+          description: Недостатньо прав для переходу
+        "409":
+          description: Недопустимий перехід, непогоджена робота або конфлікт версій

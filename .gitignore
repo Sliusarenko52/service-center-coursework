@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+src/ServiceCenter.Web/App_Data/
+*.db
+*.db-shm
+*.db-wal
+__pycache__/
+*.pyc

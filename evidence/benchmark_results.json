@@ -1,0 +1,54 @@
+{
+  "volume_testing": [
+    {
+      "records": 100,
+      "list_p50_ms": 1.7,
+      "list_p95_ms": 3.2,
+      "filter_p50_ms": 1.48,
+      "filter_p95_ms": 17.28
+    },
+    {
+      "records": 1000,
+      "list_p50_ms": 3.15,
+      "list_p95_ms": 22.05,
+      "filter_p50_ms": 1.88,
+      "filter_p95_ms": 4.48
+    },
+    {
+      "records": 10000,
+      "list_p50_ms": 15.26,
+      "list_p95_ms": 27.39,
+      "filter_p50_ms": 9.24,
+      "filter_p95_ms": 34.47
+    }
+  ],
+  "load_testing": [
+    {
+      "virtual_users": 5,
+      "total_requests": 75,
+      "rps": 282.66,
+      "p50_ms": 15.24,
+      "p95_ms": 25.66,
+      "p99_ms": 30.69,
+      "error_rate_pct": 0.0
+    },
+    {
+      "virtual_users": 10,
+      "total_requests": 150,
+      "rps": 378.92,
+      "p50_ms": 25.04,
+      "p95_ms": 29.83,
+      "p99_ms": 45.91,
+      "error_rate_pct": 0.0
+    },
+    {
+      "virtual_users": 25,
+      "total_requests": 375,
+      "rps": 385.77,
+      "p50_ms": 59.11,
+      "p95_ms": 96.46,
+      "p99_ms": 107.14,
+      "error_rate_pct": 0.0
+    }
+  ]
+}

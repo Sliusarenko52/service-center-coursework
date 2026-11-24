@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сервісний центр — Система обліку заявок</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Перейти до основного вмісту</a>
+
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm" aria-label="Головна навігація">
+      <div class="container">
+        <a class="navbar-brand" href="#" id="brand-link">СервісЦентр • Облік заявок</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Відкрити меню">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none" id="nav-links">
+            <li class="nav-item">
+              <button class="nav-link btn btn-link text-start" type="button" data-view="requests">Заявки</button>
+            </li>
+            <li class="nav-item" id="nav-create-wrap">
+              <button class="nav-link btn btn-link text-start" type="button" data-view="create">Нова заявка</button>
+            </li>
+            <li class="nav-item d-none" id="nav-parts-wrap">
+              <button class="nav-link btn btn-link text-start" type="button" data-view="parts">Склад деталей</button>
+            </li>
+          </ul>
+          <div class="d-flex align-items-center gap-2 text-light d-none" id="user-panel">
+            <span class="small" id="user-badge"></span>
+            <button class="btn btn-outline-light btn-sm" type="button" id="logout-btn">Вийти</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content" class="container py-4">
+    <div id="global-alert" class="alert d-none" role="alert" aria-live="polite"></div>
+
+    <!-- Екран входу / реєстрації -->
+    <section id="view-auth" class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+        <div class="card">
+          <div class="card-header bg-white">
+            <ul class="nav nav-tabs card-header-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tab-login-btn" type="button" role="tab" aria-selected="true">Вхід до системи</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-register-btn" type="button" role="tab" aria-selected="false">Реєстрація клієнта</button>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body p-4">
+            <form id="login-form" novalidate>
+              <h1 class="h4 mb-3">Авторизація</h1>
+              <div id="login-error" class="alert alert-danger d-none" role="alert"></div>
+              <div class="mb-3">
+                <label for="login-email" class="form-label">Електронна пошта</label>
+                <input type="email" class="form-control" id="login-email" required autocomplete="username">
+              </div>
+              <div class="mb-3">
+                <label for="login-password" class="form-label">Пароль</label>
+                <input type="password" class="form-control" id="login-password" required autocomplete="current-password">
+              </div>
+              <button type="submit" class="btn btn-primary w-100" id="login-submit">Увійти</button>
+
+              <hr class="my-4">
+              <p class="small text-muted mb-2">Швидкий вхід для демонстрації (навчальні облікові записи):</p>
+              <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm demo-fill" data-email="client1@service.local" data-pass="ClientPass123456!">Клієнт (Петренко)</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm demo-fill" data-email="client2@service.local" data-pass="ClientPass123456!">Клієнт 2 (Коваленко)</button>
+                <button type="button" class="btn btn-outline-primary btn-sm demo-fill" data-email="receiver@service.local" data-pass="ReceiverPass123!">Приймальник</button>
+                <button type="button" class="btn btn-outline-success btn-sm demo-fill" data-email="tech1@service.local" data-pass="TechPass123456!">Виконавець (Мельник)</button>
+                <button type="button" class="btn btn-outline-success btn-sm demo-fill" data-email="tech2@service.local" data-pass="TechPass123456!">Виконавець 2 (Шевченко)</button>
+              </div>
+            </form>
+
+            <form id="register-form" class="d-none" novalidate>
+              <h1 class="h4 mb-3">Реєстрація нового клієнта</h1>
+              <div id="register-error" class="alert alert-danger d-none" role="alert"></div>
+              <div class="mb-3">
+                <label for="reg-fullname" class="form-label">Прізвище, ім’я, по батькові</label>
+                <input type="text" class="form-control" id="reg-fullname" required minlength="3" maxlength="120">
+              </div>
+              <div class="mb-3">
+                <label for="reg-phone" class="form-label">Телефон</label>
+                <input type="tel" class="form-control" id="reg-phone" required placeholder="+380671234567">
+              </div>
+              <div class="mb-3">
+                <label for="reg-email" class="form-label">Електронна пошта</label>
+                <input type="email" class="form-control" id="reg-email" required>
+              </div>
+              <div class="mb-3">
+                <label for="reg-password" class="form-label">Пароль (мінімум 15 символів за NIST SP 800-63B-4)</label>
+                <input type="password" class="form-control" id="reg-password" required minlength="15" maxlength="128">
+              </div>
+              <button type="submit" class="btn btn-primary w-100" id="register-submit">Зареєструватися</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Екран списку заявок -->
+    <section id="view-requests" class="d-none">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h1 class="h3 mb-0" id="requests-heading">Заявки сервісного центру</h1>
+          <p class="text-muted small mb-0" id="requests-subtitle"></p>
+        </div>
+        <button class="btn btn-primary" type="button" id="btn-new-request">+ Нова заявка</button>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <form id="filter-form" class="row g-2 align-items-end">
+            <div class="col-12 col-md-4">
+              <label for="filter-search" class="form-label small mb-1">Пошук (номер, обладнання, серійний №, опис)</label>
+              <input type="search" class="form-control" id="filter-search" placeholder="Напр. SR-2026 або Lenovo">
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filter-status" class="form-label small mb-1">Статус</label>
+              <select class="form-select" id="filter-status">
+                <option value="">Усі статуси</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filter-sort" class="form-label small mb-1">Сортування</label>
+              <select class="form-select" id="filter-sort">
+                <option value="updated_at">За оновленням (спочатку нові)</option>
+                <option value="created_at">За датою створення</option>
+                <option value="total_cost">За вартістю</option>
+                <option value="status">За статусом</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-2 d-grid">
+              <button type="submit" class="btn btn-outline-primary">Застосувати</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="requests-loading" class="text-center py-5 d-none">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Завантаження...</span></div>
+        <p class="mt-2 text-muted">Завантаження списку заявок...</p>
+      </div>
+
+      <div id="requests-empty" class="card d-none">
+        <div class="card-body text-center py-5">
+          <h2 class="h5">Заявок не знайдено</h2>
+          <p class="text-muted mb-3">Змініть параметри пошуку або створіть нове звернення.</p>
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="reset-filters-btn">Скинути фільтри</button>
+        </div>
+      </div>
+
+      <div id="requests-table-wrap" class="card d-none">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Номер</th>
+                <th>Обладнання</th>
+                <th>Клієнт</th>
+                <th>Виконавець</th>
+                <th>Статус</th>
+                <th class="text-end">Вартість</th>
+                <th>Оновлено</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="requests-tbody"></tbody>
+          </table>
+        </div>
+        <div class="card-footer bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <span class="small text-muted" id="pagination-info"></span>
+          <div class="btn-group btn-group-sm" role="group" aria-label="Навігація сторінками">
+            <button type="button" class="btn btn-outline-secondary" id="prev-page-btn">Назад</button>
+            <button type="button" class="btn btn-outline-secondary" id="next-page-btn">Вперед</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Екран створення заявки -->
+    <section id="view-create" class="d-none">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="back-from-create">← До списку</button>
+        <h1 class="h3 mb-0">Реєстрація нової заявки</h1>
+      </div>
+      <div class="card">
+        <div class="card-body p-4">
+          <div id="create-error" class="alert alert-danger d-none" role="alert"></div>
+          <form id="create-request-form" novalidate>
+            <div class="mb-3 d-none" id="create-client-wrap">
+              <label for="create-client-id" class="form-label">Клієнт</label>
+              <select class="form-select" id="create-client-id"></select>
+            </div>
+            <div class="row g-3">
+              <div class="col-12 col-md-4">
+                <label for="create-category" class="form-label">Категорія обладнання *</label>
+                <input type="text" class="form-control" id="create-category" required placeholder="Напр. Ноутбук">
+              </div>
+              <div class="col-12 col-md-4">
+                <label for="create-brand" class="form-label">Виробник *</label>
+                <input type="text" class="form-control" id="create-brand" required placeholder="Напр. Lenovo">
+              </div>
+              <div class="col-12 col-md-4">
+                <label for="create-model" class="form-label">Модель *</label>
+                <input type="text" class="form-control" id="create-model" required placeholder="Напр. IdeaPad 5">
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="create-serial" class="form-label">Серійний номер *</label>
+                <input type="text" class="form-control" id="create-serial" required placeholder="Напр. SN-LNV-90123">
+              </div>
+              <div class="col-12">
+                <label for="create-issue" class="form-label">Опис несправності *</label>
+                <textarea class="form-control" id="create-issue" rows="3" required placeholder="Детально опишіть симптоми несправності..."></textarea>
+              </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+              <button type="submit" class="btn btn-primary" id="create-submit">Зареєструвати заявку</button>
+              <button type="button" class="btn btn-outline-secondary" id="create-cancel">Скасувати</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Екран детальної картки заявки -->
+    <section id="view-details" class="d-none">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="back-from-details">← До списку</button>
+          <h1 class="h3 mb-0" id="detail-title">Заявка</h1>
+          <span id="detail-status-badge"></span>
+          <span class="badge text-bg-light border" id="detail-version-badge" title="Версія для контролю конкурентних змін"></span>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm" id="detail-refresh-btn">Оновити дані</button>
+      </div>
+
+      <!-- Банер конфлікту версій -->
+      <div id="detail-conflict-banner" class="alert alert-warning d-none d-flex flex-wrap justify-content-between align-items-center gap-2" role="alert">
+        <div>
+          <strong>Конфлікт одночасного редагування (409 Conflict):</strong>
+          <span id="detail-conflict-text"></span>
+        </div>
+        <button type="button" class="btn btn-warning btn-sm" id="conflict-reload-btn">Завантажити актуальні дані</button>
+      </div>
+
+      <div id="detail-error" class="alert alert-danger d-none" role="alert"></div>
+
+      <div class="row g-3">
+        <!-- Ліва колонка: інформація, діагностика, роботи, деталі -->
+        <div class="col-12 col-lg-8">
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-semibold">Відомості про звернення та обладнання</div>
+            <div class="card-body">
+              <div class="row g-2 small">
+                <div class="col-12 col-md-6"><strong>Клієнт:</strong> <span id="detail-client"></span></div>
+                <div class="col-12 col-md-6"><strong>Телефон:</strong> <span id="detail-phone"></span></div>
+                <div class="col-12 col-md-6"><strong>Обладнання:</strong> <span id="detail-equipment"></span></div>
+                <div class="col-12 col-md-6"><strong>Серійний №:</strong> <span id="detail-serial"></span></div>
+                <div class="col-12 col-md-6"><strong>Виконавець:</strong> <span id="detail-technician"></span></div>
+                <div class="col-12 col-md-6"><strong>Створено:</strong> <span id="detail-created"></span></div>
+              </div>
+              <hr>
+              <p class="mb-1"><strong>Опис несправності:</strong></p>
+              <p class="mb-0" id="detail-issue"></p>
+              <div id="detail-result-box" class="mt-3 p-3 bg-success-subtle border border-success-subtle rounded d-none">
+                <strong class="d-block mb-1">Результат виконання робіт:</strong>
+                <span id="detail-completion-result"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Призначення виконавця (тільки приймальник) -->
+          <div class="card mb-3 d-none" id="panel-assign">
+            <div class="card-header bg-white fw-semibold">Призначення виконавця (Приймальник)</div>
+            <div class="card-body">
+              <form id="assign-form" class="row g-2 align-items-end">
+                <div class="col-12 col-md-8">
+                  <label for="assign-tech-select" class="form-label small mb-1">Оберіть виконавця</label>
+                  <select class="form-select" id="assign-tech-select" required></select>
+                </div>
+                <div class="col-12 col-md-4 d-grid">
+                  <button type="submit" class="btn btn-primary">Призначити</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Діагностика -->
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-semibold">Результати діагностики</div>
+            <div class="card-body">
+              <p id="detail-diagnostics-text" class="mb-2 text-muted"></p>
+              <form id="diagnostics-form" class="d-none">
+                <div class="mb-2">
+                  <label for="diagnostics-input" class="form-label small">Оновити висновок діагностики</label>
+                  <textarea class="form-control" id="diagnostics-input" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-outline-primary btn-sm">Зберегти діагностику</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Перелік робіт -->
+          <div class="card mb-3">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <span class="fw-semibold">Перелік робіт</span>
+              <span class="small fw-semibold" id="works-total-label"></span>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm mb-2">
+                  <thead>
+                    <tr>
+                      <th>Назва роботи</th>
+                      <th>Стан</th>
+                      <th class="text-end">Вартість</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="works-tbody"></tbody>
+                </table>
+              </div>
+              <form id="add-work-form" class="row g-2 align-items-end d-none mt-2 pt-2 border-top">
+                <div class="col-12 col-md-6">
+                  <label for="work-title" class="form-label small mb-1">Назва роботи</label>
+                  <input type="text" class="form-control form-control-sm" id="work-title" required placeholder="Напр. Заміна кулера">
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="work-price" class="form-label small mb-1">Вартість (грн)</label>
+                  <input type="number" step="0.01" min="0.01" class="form-control form-control-sm" id="work-price" required>
+                </div>
+                <div class="col-6 col-md-3 d-grid">
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Додати роботу</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Облік деталей -->
+          <div class="card mb-3">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <span class="fw-semibold">Використані деталі (складський облік)</span>
+              <span class="small fw-semibold" id="parts-total-label"></span>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm mb-2">
+                  <thead>
+                    <tr>
+                      <th>Деталь</th>
+                      <th class="text-end">К-сть</th>
+                      <th class="text-end">Ціна</th>
+                      <th class="text-end">Сума</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="req-parts-tbody"></tbody>
+                </table>
+              </div>
+              <form id="add-part-form" class="row g-2 align-items-end d-none mt-2 pt-2 border-top">
+                <div class="col-12 col-md-6">
+                  <label for="part-select" class="form-label small mb-1">Деталь зі складу</label>
+                  <select class="form-select form-select-sm" id="part-select" required></select>
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="part-qty" class="form-label small mb-1">Кількість</label>
+                  <input type="number" min="1" max="100" value="1" class="form-control form-control-sm" id="part-qty" required>
+                </div>
+                <div class="col-6 col-md-3 d-grid">
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Списати деталь</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Права колонка: підсумок, зміна статусу, історія -->
+        <div class="col-12 col-lg-4">
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-semibold">Фінансовий підсумок</div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="text-muted">Роботи:</span>
+                <span id="summary-works">0.00 грн</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Деталі:</span>
+                <span id="summary-parts">0.00 грн</span>
+              </div>
+              <hr class="my-2">
+              <div class="d-flex justify-content-between fs-5 fw-bold">
+                <span>Разом:</span>
+                <span id="summary-total">0.00 грн</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-3" id="panel-actions">
+            <div class="card-header bg-white fw-semibold">Дії із заявкою</div>
+            <div class="card-body" id="actions-container"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-white fw-semibold">Історія переходів станів</div>
+            <div class="card-body" id="history-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Екран складу деталей -->
+    <section id="view-parts" class="d-none">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Склад запчастин та деталей</h1>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="back-from-parts">← До заявок</button>
+      </div>
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Артикул (SKU)</th>
+                <th>Найменування</th>
+                <th class="text-end">Ціна за од.</th>
+                <th class="text-end">Залишок на складі</th>
+              </tr>
+            </thead>
+            <tbody id="parts-catalog-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
