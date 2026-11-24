@@ -27,7 +27,7 @@ public sealed class CustomWebFactory : WebApplicationFactory<Program>, IDisposab
         base.Dispose(disposing);
         if (File.Exists(_dbPath))
         {
-            try { File.Delete(_dbPath); } catch { /* ігноруємо блокування файлу на Windows */ }
+            try { File.Delete(_dbPath); } catch {  }
         }
     }
 }
@@ -52,7 +52,6 @@ public sealed class ApiIntegrationTests
         var receiver = await CreateAuthedClientAsync(factory, "receiver@service.local", "ReceiverPass123!");
         var tech1 = await CreateAuthedClientAsync(factory, "tech1@service.local", "TechPass123456!");
 
-        // 1. Клієнт створює заявку
         var createResp = await client1.PostAsJsonAsync("/api/requests", new CreateServiceRequestDto(
             null, "Ноутбук", "Dell", "XPS 15", "SN-XPS-9991", "Не вмикається після оновлення BIOS"));
         Assert.Equal(HttpStatusCode.Created, createResp.StatusCode);
@@ -60,7 +59,6 @@ public sealed class ApiIntegrationTests
         Assert.Equal(RequestStatuses.New, created.Status);
         Assert.Equal(1, created.Version);
 
-        // 2. Приймальник призначає виконавця (tech1 має id = 4 у seed)
         var techs = (await receiver.GetFromJsonAsync<List<UserDto>>("/api/users/technicians", JsonOpts))!;
         var tech1Id = techs.First(t => t.Email == "tech1@service.local").Id;
 
@@ -71,7 +69,6 @@ public sealed class ApiIntegrationTests
         Assert.Equal(RequestStatuses.Assigned, assigned.Status);
         Assert.Equal(2, assigned.Version);
 
-        // 3. Виконавець фіксує діагностику, додає роботу й деталь
         var diagResp = await tech1.PutAsJsonAsync($"/api/requests/{created.Id}/diagnostics",
             new UpdateDiagnosticsDto("Пошкоджено мікросхему BIOS та висохла термопаста.", assigned.Version));
         diagResp.EnsureSuccessStatusCode();
@@ -91,7 +88,6 @@ public sealed class ApiIntegrationTests
         var afterPart = (await partResp.Content.ReadFromJsonAsync<ServiceRequestDetailsDto>(JsonOpts))!;
         Assert.Equal(950m + thermalPart.UnitPrice, afterPart.TotalCost);
 
-        // 4. Надсилання на погодження -> погодження клієнтом
         var awaitResp = await tech1.PostAsJsonAsync($"/api/requests/{created.Id}/status",
             new ChangeStatusDto(RequestStatuses.AwaitingApproval, "Кошторис сформовано", null, afterPart.Version));
         awaitResp.EnsureSuccessStatusCode();
@@ -103,7 +99,6 @@ public sealed class ApiIntegrationTests
         var approved = (await approveResp.Content.ReadFromJsonAsync<ServiceRequestDetailsDto>(JsonOpts))!;
         Assert.All(approved.WorkItems, w => Assert.True(w.IsApproved));
 
-        // 5. Виконання та закриття
         var inProgResp = await tech1.PostAsJsonAsync($"/api/requests/{created.Id}/status",
             new ChangeStatusDto(RequestStatuses.InProgress, "Розпочато ремонт", null, approved.Version));
         inProgResp.EnsureSuccessStatusCode();
@@ -161,12 +156,10 @@ public sealed class ApiIntegrationTests
         var target = list.Items.First();
         var staleVersion = target.Version;
 
-        // Перший працівник (виконавець) зберігає діагностику -> версія зростає
         var firstEdit = await tech1.PutAsJsonAsync($"/api/requests/{target.Id}/diagnostics",
             new UpdateDiagnosticsDto("Оновлена діагностика виконавцем", staleVersion));
         firstEdit.EnsureSuccessStatusCode();
 
-        // Другий працівник (приймальник) намагається додати роботу зі старою версією
         var secondEdit = await receiver.PostAsJsonAsync($"/api/requests/{target.Id}/works",
             new AddWorkItemDto("Додаткова робота приймальника", 300m, staleVersion));
 

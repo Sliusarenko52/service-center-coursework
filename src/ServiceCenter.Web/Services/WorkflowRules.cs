@@ -2,9 +2,6 @@ using ServiceCenter.Web.Models;
 
 namespace ServiceCenter.Web.Services;
 
-/// <summary>
-/// Чисті предметні правила переходів станів та доступу до заявок сервісного центру.
-/// </summary>
 public static class WorkflowRules
 {
     private static readonly Dictionary<string, HashSet<string>> AllowedTransitions = new()
@@ -21,9 +18,6 @@ public static class WorkflowRules
         [RequestStatuses.Cancelled] = []
     };
 
-    /// <summary>
-    /// Перевіряє, чи має користувач право бачити конкретну заявку.
-    /// </summary>
     public static bool CanView(long userId, string role, ServiceRequestRecord req) => role switch
     {
         UserRoles.Receiver => true,
@@ -32,9 +26,6 @@ public static class WorkflowRules
         _ => false
     };
 
-    /// <summary>
-    /// Перевіряє допустимість переходу стану, повноваження ролі та обов'язкові інваріанти.
-    /// </summary>
     public static void ValidateStatusTransition(
         ServiceRequestRecord req,
         string newStatus,
@@ -58,7 +49,6 @@ public static class WorkflowRules
                 req.Version);
         }
 
-        // Перевірка прав на конкретний перехід
         switch (newStatus)
         {
             case RequestStatuses.Assigned:

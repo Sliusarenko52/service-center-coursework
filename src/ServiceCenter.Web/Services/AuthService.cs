@@ -5,9 +5,6 @@ using ServiceCenter.Web.Models;
 
 namespace ServiceCenter.Web.Services;
 
-/// <summary>
-/// Сервіс автентифікації, реєстрації та отримання довідника користувачів за ролями.
-/// </summary>
 public sealed class AuthService
 {
     private readonly SqliteConnectionFactory _db;

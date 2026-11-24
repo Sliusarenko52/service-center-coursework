@@ -4,9 +4,6 @@ using ServiceCenter.Web.Models;
 
 namespace ServiceCenter.Web.Data;
 
-/// <summary>
-/// Фабрика підключень до SQLite з увімкненою перевіркою зовнішніх ключів.
-/// </summary>
 public sealed class SqliteConnectionFactory
 {
     private readonly string _connectionString;
@@ -27,9 +24,6 @@ public sealed class SqliteConnectionFactory
     }
 }
 
-/// <summary>
-/// Ініціалізація схеми БД (міграція) та початкове наповнення синтетичними даними.
-/// </summary>
 public static class DatabaseInitializer
 {
     public static void Initialize(SqliteConnectionFactory factory)
@@ -314,18 +308,15 @@ public static class DatabaseInitializer
         var eq5 = InsertEquipment(client1, "ПК", "Custom", "Workstation i7", "SN-PC-10445");
         var eq6 = InsertEquipment(client2, "Планшет", "Apple", "iPad Air 5", "SN-APL-66201");
 
-        // 1. Нова заявка (ще без виконавця)
         var r1 = InsertRequest("SR-2026-0001", client1, eq1, null,
             "Ноутбук сильно гріється і вимикається під навантаженням", "", "", RequestStatuses.New, 0m, 1);
         AddHistory(r1, null, RequestStatuses.New, client1, "Заявку зареєстровано клієнтом", 24);
 
-        // 2. Призначено виконавця
         var r2 = InsertRequest("SR-2026-0002", client2, eq3, tech1,
             "Шумить правий вентилятор охолодження", "", "", RequestStatuses.Assigned, 0m, 2);
         AddHistory(r2, null, RequestStatuses.New, client2, "Заявку створено", 48);
         AddHistory(r2, RequestStatuses.New, RequestStatuses.Assigned, receiver, "Призначено виконавця Мельник А.П.", 46);
 
-        // 3. Очікує погодження клієнтом (діагностика + роботи + деталі)
         var r3 = InsertRequest("SR-2026-0003", client1, eq2, tech2,
             "Тріснуло захисне скло та не працює сенсор у нижній частині екрана",
             "Діагностика: пошкоджено матрицю дисплейного модуля, контролер живлення справний.",
@@ -337,7 +328,6 @@ public static class DatabaseInitializer
         AddHistory(r3, RequestStatuses.Assigned, RequestStatuses.Diagnosing, tech2, "Розпочато діагностику", 65);
         AddHistory(r3, RequestStatuses.Diagnosing, RequestStatuses.AwaitingApproval, tech2, "Кошторис передано на погодження клієнту", 60);
 
-        // 4. Погоджено клієнтом
         var r4 = InsertRequest("SR-2026-0004", client1, eq5, tech1,
             "Не визначається системний накопичувач при запуску",
             "Діагностика: збій контролера старого SSD, потрібна заміна на новий NVMe 512 ГБ.",
@@ -348,7 +338,6 @@ public static class DatabaseInitializer
         AddHistory(r4, RequestStatuses.New, RequestStatuses.AwaitingApproval, tech1, "Надіслано кошторис", 80);
         AddHistory(r4, RequestStatuses.AwaitingApproval, RequestStatuses.Approved, client1, "Клієнт погодив вартість", 75);
 
-        // 5. У роботі
         var r5 = InsertRequest("SR-2026-0005", client2, eq6, tech2,
             "Розхитаний роз'єм USB-C, заряджається лише під кутом",
             "Діагностика: знос контактної групи роз'єму живлення.",
@@ -358,7 +347,6 @@ public static class DatabaseInitializer
         AddHistory(r5, null, RequestStatuses.New, client2, "Заявку створено", 120);
         AddHistory(r5, RequestStatuses.Approved, RequestStatuses.InProgress, tech2, "Роботу розпочато", 30);
 
-        // 6. Завершена заявка
         var r6 = InsertRequest("SR-2026-0006", client1, eq1, tech1,
             "Профілактична чистка системи охолодження та заміна термопасти",
             "Діагностика: висохла термопаста, забруднений радіатор.",
@@ -369,7 +357,6 @@ public static class DatabaseInitializer
         AddHistory(r6, null, RequestStatuses.New, client1, "Заявку створено", 168);
         AddHistory(r6, RequestStatuses.WorkDone, RequestStatuses.Completed, receiver, "Заявку закрито та видано клієнту", 10);
 
-        // 7-10. Додаткові заявки для демонстрації фільтрації та пагінації
         var r7 = InsertRequest("SR-2026-0007", client2, eq4, tech1,
             "Мерехтіння підсвітки монітора при яскравості нижче 50%",
             "Огляд блоку живлення та шлейфу матриці.", "", RequestStatuses.Diagnosing, 0m, 2);

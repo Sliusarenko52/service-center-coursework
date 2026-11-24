@@ -1,6 +1,3 @@
-/**
- * Клієнтський модуль взаємодії з REST API сервісного центру.
- */
 export class ApiError extends Error {
   constructor(status, code, message, fieldErrors = null, currentVersion = null) {
     super(message);

@@ -177,7 +177,6 @@ function renderRequestDetails(req) {
   el("detail-result-box").classList.toggle("d-none", !hasResult);
   el("detail-completion-result").textContent = req.completionResult || "";
 
-  // Панель призначення виконавця
   const canAssign = state.user.role === "RECEIVER" && (req.status === "NEW" || req.status === "ASSIGNED");
   el("panel-assign").classList.toggle("d-none", !canAssign);
   if (canAssign) {
@@ -187,7 +186,6 @@ function renderRequestDetails(req) {
     ).join("");
   }
 
-  // Панель редагування діагностики / робіт / деталей
   const canEditWork =
     (state.user.role === "TECHNICIAN" && req.technicianId === state.user.id && ["ASSIGNED", "DIAGNOSING", "AWAITING_APPROVAL"].includes(req.status)) ||
     (state.user.role === "RECEIVER" && ["NEW", "ASSIGNED", "DIAGNOSING", "AWAITING_APPROVAL"].includes(req.status));
@@ -200,7 +198,6 @@ function renderRequestDetails(req) {
     el("diagnostics-input").value = req.diagnosticsNotes || "";
   }
 
-  // Таблиця робіт
   const worksBody = el("works-tbody");
   if (req.workItems.length === 0) {
     worksBody.innerHTML = `<tr><td colspan="4" class="text-muted text-center py-2">Роботи ще не додані</td></tr>`;
@@ -219,7 +216,6 @@ function renderRequestDetails(req) {
   el("add-work-form").classList.toggle("d-none", !canEditWork);
   el("works-total-label").textContent = formatMoney(req.worksTotal);
 
-  // Таблиця деталей
   const partsBody = el("req-parts-tbody");
   if (req.parts.length === 0) {
     partsBody.innerHTML = `<tr><td colspan="5" class="text-muted text-center py-2">Деталі не використовувались</td></tr>`;
@@ -244,15 +240,12 @@ function renderRequestDetails(req) {
   }
   el("parts-total-label").textContent = formatMoney(req.partsTotal);
 
-  // Фінансовий підсумок
   el("summary-works").textContent = formatMoney(req.worksTotal);
   el("summary-parts").textContent = formatMoney(req.partsTotal);
   el("summary-total").textContent = formatMoney(req.totalCost);
 
-  // Доступні дії зміни статусу
   renderStatusActions(req);
 
-  // Історія
   const histBox = el("history-container");
   histBox.innerHTML = req.history.map((h) => `
     <div class="timeline-item">
@@ -356,7 +349,6 @@ async function openPartsView() {
   }
 }
 
-// Ініціалізація обробників подій
 document.addEventListener("DOMContentLoaded", () => {
   populateStatusFilter();
   initSession();

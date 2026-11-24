@@ -1,8 +1,5 @@
 namespace ServiceCenter.Web.Services;
 
-/// <summary>
-/// Базовий виняток прикладного шару для формування відповідей RFC 9457 ProblemDetails.
-/// </summary>
 public abstract class AppException : Exception
 {
     public int StatusCode { get; }

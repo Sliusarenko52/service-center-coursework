@@ -1,8 +1,5 @@
 namespace ServiceCenter.Web.Models;
 
-/// <summary>
-/// Ролі користувачів у системі заявок сервісного центру.
-/// </summary>
 public static class UserRoles
 {
     public const string Client = "CLIENT";
@@ -12,9 +9,6 @@ public static class UserRoles
     public static readonly string[] All = [Client, Receiver, Technician];
 }
 
-/// <summary>
-/// Допустимі стани заявки на обслуговування та ремонт обладнання.
-/// </summary>
 public static class RequestStatuses
 {
     public const string New = "NEW";
@@ -35,9 +29,6 @@ public static class RequestStatuses
     ];
 }
 
-/// <summary>
-/// Користувач системи (клієнт, приймальник або виконавець).
-/// </summary>
 public sealed class UserRecord
 {
     public long Id { get; set; }
@@ -49,9 +40,6 @@ public sealed class UserRecord
     public DateTime CreatedAt { get; set; }
 }
 
-/// <summary>
-/// Обладнання, передане клієнтом на обслуговування.
-/// </summary>
 public sealed class EquipmentRecord
 {
     public long Id { get; set; }
@@ -63,9 +51,6 @@ public sealed class EquipmentRecord
     public DateTime CreatedAt { get; set; }
 }
 
-/// <summary>
-/// Заявка сервісного центру з контролем версії для оптимістичного блокування.
-/// </summary>
 public sealed class ServiceRequestRecord
 {
     public long Id { get; set; }
@@ -83,9 +68,6 @@ public sealed class ServiceRequestRecord
     public DateTime UpdatedAt { get; set; }
 }
 
-/// <summary>
-/// Вид роботи у кошторисі заявки.
-/// </summary>
 public sealed class WorkItemRecord
 {
     public long Id { get; set; }
@@ -97,9 +79,6 @@ public sealed class WorkItemRecord
     public DateTime CreatedAt { get; set; }
 }
 
-/// <summary>
-/// Деталь (запчастина) на складі сервісного центру.
-/// </summary>
 public sealed class PartRecord
 {
     public long Id { get; set; }
@@ -109,9 +88,6 @@ public sealed class PartRecord
     public int StockQty { get; set; }
 }
 
-/// <summary>
-/// Використана деталь у межах конкретної заявки.
-/// </summary>
 public sealed class RequestPartRecord
 {
     public long Id { get; set; }
@@ -124,9 +100,6 @@ public sealed class RequestPartRecord
     public DateTime CreatedAt { get; set; }
 }
 
-/// <summary>
-/// Запис журналу переходів станів заявки.
-/// </summary>
 public sealed class StatusHistoryRecord
 {
     public long Id { get; set; }

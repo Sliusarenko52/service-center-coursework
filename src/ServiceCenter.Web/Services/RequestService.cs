@@ -4,9 +4,6 @@ using ServiceCenter.Web.Models;
 
 namespace ServiceCenter.Web.Services;
 
-/// <summary>
-/// Прикладний сервіс керування заявками сервісного центру, роботами, деталями та історією станів.
-/// </summary>
 public sealed class RequestService
 {
     private readonly SqliteConnectionFactory _db;

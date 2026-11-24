@@ -41,7 +41,6 @@
   <main id="main-content" class="container py-4">
     <div id="global-alert" class="alert d-none" role="alert" aria-live="polite"></div>
 
-    <!-- Екран входу / реєстрації -->
     <section id="view-auth" class="row justify-content-center">
       <div class="col-12 col-md-8 col-lg-6">
         <div class="card">
@@ -106,7 +105,6 @@
       </div>
     </section>
 
-    <!-- Екран списку заявок -->
     <section id="view-requests" class="d-none">
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <div>
@@ -186,7 +184,6 @@
       </div>
     </section>
 
-    <!-- Екран створення заявки -->
     <section id="view-create" class="d-none">
       <div class="d-flex align-items-center gap-2 mb-3">
         <button type="button" class="btn btn-outline-secondary btn-sm" id="back-from-create">← До списку</button>
@@ -231,7 +228,6 @@
       </div>
     </section>
 
-    <!-- Екран детальної картки заявки -->
     <section id="view-details" class="d-none">
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <div class="d-flex align-items-center gap-2">
@@ -243,7 +239,6 @@
         <button type="button" class="btn btn-outline-primary btn-sm" id="detail-refresh-btn">Оновити дані</button>
       </div>
 
-      <!-- Банер конфлікту версій -->
       <div id="detail-conflict-banner" class="alert alert-warning d-none d-flex flex-wrap justify-content-between align-items-center gap-2" role="alert">
         <div>
           <strong>Конфлікт одночасного редагування (409 Conflict):</strong>
@@ -255,7 +250,6 @@
       <div id="detail-error" class="alert alert-danger d-none" role="alert"></div>
 
       <div class="row g-3">
-        <!-- Ліва колонка: інформація, діагностика, роботи, деталі -->
         <div class="col-12 col-lg-8">
           <div class="card mb-3">
             <div class="card-header bg-white fw-semibold">Відомості про звернення та обладнання</div>
@@ -278,7 +272,6 @@
             </div>
           </div>
 
-          <!-- Призначення виконавця (тільки приймальник) -->
           <div class="card mb-3 d-none" id="panel-assign">
             <div class="card-header bg-white fw-semibold">Призначення виконавця (Приймальник)</div>
             <div class="card-body">
@@ -294,7 +287,6 @@
             </div>
           </div>
 
-          <!-- Діагностика -->
           <div class="card mb-3">
             <div class="card-header bg-white fw-semibold">Результати діагностики</div>
             <div class="card-body">
@@ -309,7 +301,6 @@
             </div>
           </div>
 
-          <!-- Перелік робіт -->
           <div class="card mb-3">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
               <span class="fw-semibold">Перелік робіт</span>
@@ -345,7 +336,6 @@
             </div>
           </div>
 
-          <!-- Облік деталей -->
           <div class="card mb-3">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
               <span class="fw-semibold">Використані деталі (складський облік)</span>
@@ -383,7 +373,6 @@
           </div>
         </div>
 
-        <!-- Права колонка: підсумок, зміна статусу, історія -->
         <div class="col-12 col-lg-4">
           <div class="card mb-3">
             <div class="card-header bg-white fw-semibold">Фінансовий підсумок</div>
@@ -417,7 +406,6 @@
       </div>
     </section>
 
-    <!-- Екран складу деталей -->
     <section id="view-parts" class="d-none">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="h3 mb-0">Склад запчастин та деталей</h1>
