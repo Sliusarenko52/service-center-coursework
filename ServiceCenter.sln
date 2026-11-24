@@ -13,12 +13,12 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A1B2C3D4-1111-4444-8888-111111111111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1B2C3D4-1111-4444-8888-111111111111}.Debug|Any CPU.Build.Cfg = Debug|Any CPU
+		{A1B2C3D4-1111-4444-8888-111111111111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B2C3D4-1111-4444-8888-111111111111}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1B2C3D4-1111-4444-8888-111111111111}.Release|Any CPU.Build.Cfg = Release|Any CPU
+		{A1B2C3D4-1111-4444-8888-111111111111}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A1B2C3D4-2222-4444-8888-222222222222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1B2C3D4-2222-4444-8888-222222222222}.Debug|Any CPU.Build.Cfg = Debug|Any CPU
+		{A1B2C3D4-2222-4444-8888-222222222222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B2C3D4-2222-4444-8888-222222222222}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1B2C3D4-2222-4444-8888-222222222222}.Release|Any CPU.Build.Cfg = Release|Any CPU
+		{A1B2C3D4-2222-4444-8888-222222222222}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
